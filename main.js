@@ -66,7 +66,7 @@ function loadAngryScene() {
     button1.textContent = "Försök få hennes uppmärksamhet och kolla om hon kan rekommendera en ny öl at testa"
     button2.textContent = "Du beställer bara en stor stark från nya bartendern"
     button1.addEventListener("click", ()=> loadHomeScene());
-    button2.addEventListener("click", ()=> loadAloneScene());
+    button2.addEventListener("click", ()=> loadCloserScene1());
 }
 //homescene
 function loadHomeScene1() {
@@ -82,16 +82,16 @@ function loadHomeScene1() {
 }
 
 //not cleaned scene
-function loadHomeScene1() {
+function loadHomeScene() {
     const text = document.getElementById("text");
     const button1 = document.getElementById("opt-1")
     const button2 = document.getElementById("opt-2")
 
     text.textContent = "Hon kände direkt när hon kom hem till dig att det kändes alldeles för ostädat, hon bestämde sig för att åka hem"
     button1.textContent = "Du går tillbaka till krogen"
-    button2.textContent = "Du lägger dig i soffan och äter chips och surfar en stund och lägger dig"
+    button2.textContent = "Du stannar"
     button1.addEventListener("click", ()=> loadPubScene2());
-    button2.addEventListener("click", ()=> loadGoToSleepScene());
+    button2.addEventListener("click", ()=> loadCloserScene1());
 }
 //pubscene 2
 function loadPubScene2() {
@@ -104,6 +104,10 @@ function loadPubScene2() {
     button2.textContent = "Du håller inte med vakterna"
     button1.addEventListener("click", ()=> loadCloserScene1());
     button2.addEventListener("click", ()=> loadPoliceScene());
+    //policescen
+    function loadPoliceScene(){
+        alert ("vakterna har tillkallat polis, du spenderar resten av natten i fyllecell");
+    }
 }
 
 //closer scene 1
@@ -114,21 +118,6 @@ function loadCloserScene1() {
 
 }
 
-//police scene 1
-
-function loadPoliceScene() {
-    const text = document.getElementById("text");
-    text.textContent = "Vakterna tillkallar polis, polisen tar med dig till fyllecell där du får sova resten av natten"
-
-}
-
-//go to sleep scene 2
-
-function loadPoliceScene() {
-    const text = document.getElementById("text");
-    text.textContent = "Vakterna tillkallar polis, polisen tar med dig till fyllecell där du får sova resten av natten"
-
-}
 
 
 
