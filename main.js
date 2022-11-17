@@ -118,7 +118,7 @@ function loadCloserScene2() {
 function loadNotCleanedScene() {
     
     alert ("Du hade inte städat hemma så hon tyckte det såg för ofräscht ut och valde att dricka upp sin öl du bjöd på och åka hem igen");
-
+    
 
 }
 
