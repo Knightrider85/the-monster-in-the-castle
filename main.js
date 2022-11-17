@@ -14,6 +14,7 @@ function loadStartScen() {
     button2.textContent = "Stanna kvar, städa, duscha, gå ut efter"
     button1.addEventListener("click", ()=> loadPubScene());
     button2.addEventListener("click", ()=> loadCleanScene());
+
 }
 
 //val gå ut direkt scen1
@@ -52,7 +53,7 @@ function loadMenuScene() {
     text.textContent = "Du får en meny av den snygge tjejen i baren, som rekomenderar en IPA och en Högrevsburgare"
     button1.textContent = "Du beställer det hon rekommenderade"
     button2.textContent = "Du beställer bara en stor stark"
-    button1.addEventListener("click", ()=> loadHomeScene());
+    button1.addEventListener("click", ()=> loadHomeScene1());
     button2.addEventListener("click", ()=> loadAngryScene());
 }
 
@@ -107,7 +108,7 @@ function loadCloserScene1() {
 
 }
 // closer scene 2
-function loadCloserScene1() {
+function loadCloserScene2() {
     
     alert ("Du vingla sakta hem utan något napp ikväll, du bestämde dig för att testa igen imorgon men vara lite trevligare");
 
@@ -121,5 +122,11 @@ function loadNotCleanedScene() {
 
 }
 
+function loadPoliceScene() {
+    
+    alert ("Polisen grep dig och tog med dig till fyllecellen där du fick sova resten av natten");
+
+
+}
 
 
