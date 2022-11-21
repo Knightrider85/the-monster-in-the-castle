@@ -1,3 +1,11 @@
+/**
+ * Leading text in game process
+ * @type {HTMLDivElement}
+ */
+/**
+ * Optionbuttonsforgame
+ * @type {HTMLDivElement}
+ */
 const textElement = document.getElementById('text')
 const optionButtonsElement = document.getElementById('option-buttons')
 
@@ -30,6 +38,11 @@ function showOption(option) {
   return option.requiredState == null || option.requiredState(state)
 }
 
+/**
+ * 
+ * @param {Option} option 
+ * @returns 
+ */
 function selectOption(option) {
   const nextTextNodeId = option.nextText
   if (nextTextNodeId <= 0) {
@@ -39,6 +52,13 @@ function selectOption(option) {
   showTextNode(nextTextNodeId)
 }
 
+/**
+ * @typedef {{ text: string, nextText: number }} Option
+ */
+
+/**
+ * @type {Array<Option>}
+ */
 const textNodes = [
   {
     id: 1,
