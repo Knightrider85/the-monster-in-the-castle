@@ -1,132 +1,228 @@
-window.addEventListener("DOMContentLoaded", main);
+/**
+ * Leading text in game process
+ * @type {HTMLDivElement}
+ */
+/**
+ * Optionbuttonsforgame
+ * @type {HTMLDivElement}
+ */
+const textElement = document.getElementById('text')
+const optionButtonsElement = document.getElementById('option-buttons')
 
-function main() {
-    loadStartScen();
-}
-//start scen
-function loadStartScen() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
+let state = {}
 
-    text.textContent = "Hej idag får du träffa Erik, Erik är snickare och precis kommit hem på Fredagen efter att jobbat hela veckan"
-    button1.textContent = "Byt om och gå på aw direkt"
-    button2.textContent = "Stanna kvar, städa, duscha, gå ut efter"
-    button1.addEventListener("click", ()=> loadPubScene());
-    button2.addEventListener("click", ()=> loadCleanScene());
-
-}
-
-//val gå ut direkt scen1
-
-function loadPubScene() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
-
-    text.textContent = "Äntligen framme på krogen"
-    button1.textContent = "Börja med något att äta"
-    button2.textContent = "Beställ en öl direkt"
-    button1.addEventListener("click", ()=> loadMenuScene());
-    button2.addEventListener("click", ()=> loadBeerScene());
+/**
+ * start game scene
+ */
+function startGame() {
+  state = {}
+  showTextNode(1)
 }
 
-// beer scene
-function loadBeerScene() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
 
-    text.textContent = "Du blickar över baren och ser att tjejen som jobbar i baren va as snygg, dags att beställa"
-    button1.textContent = "Kan jag få en bärs!"
-    button2.textContent = "Skulle jag kunna beställa en öl?"
-    button1.addEventListener("click", ()=> loadAngryScene());
-    button2.addEventListener("click", ()=> loadMenuScene());
-}
 
-// Menu scene
-function loadMenuScene() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
+function showTextNode(textNodeIndex) {
+  const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+  textElement.innerText = textNode.text
+  while (optionButtonsElement.firstChild) {
+    optionButtonsElement.removeChild(optionButtonsElement.firstChild)
+  }
 
-    text.textContent = "Du får en meny av den snygge tjejen i baren, som rekomenderar en IPA och en Högrevsburgare"
-    button1.textContent = "Du beställer det hon rekommenderade"
-    button2.textContent = "Du beställer bara en stor stark"
-    button1.addEventListener("click", ()=> loadHomeScene1());
-    button2.addEventListener("click", ()=> loadAngryScene());
-}
-
-// angry scene
-function loadAngryScene() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
-
-    text.textContent = "Du har gjort något som fått henne att sluta titta åt ditt håll, någon annan tar nu dina beställningar"
-    button1.textContent = "Försök få hennes uppmärksamhet och kolla om hon kan rekommendera en ny öl at testa"
-    button2.textContent = "Du beställer bara en stor stark från nya bartendern"
-    button1.addEventListener("click", ()=> loadHomeScene1());
-    button2.addEventListener("click", ()=> loadCloserScene1());
-}
-//homescene
-function loadHomeScene1() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
-
-    text.textContent = "Den snygge tjejen som jobbade i baren har slutat för dagen och tar ett glas med dig, sen följer med dig hem"
-    button1.textContent = "Du bestämmer dig för att ge det en chans och försöka kyssa henne"
-    button2.textContent = "Du erbjuder henne något att dricka"
-    button1.addEventListener("click", ()=> loadNotCleanedScene());
-    button2.addEventListener("click", ()=> loadNotCleanedScene());
-}
-
-//pubscene 2
-function loadPubScene2() {
-    const text = document.getElementById("text");
-    const button1 = document.getElementById("opt-1")
-    const button2 = document.getElementById("opt-2")
-
-    text.textContent = "Du kommer fram till krogen igen, vakterna tycker du är för berusad och släpper inte in dig"
-    button1.textContent = "Du går tillbaka hem"
-    button2.textContent = "Du håller inte med vakterna"
-    button1.addEventListener("click", ()=> loadCloserScene2());
-    button2.addEventListener("click", ()=> loadPoliceScene());
-    //policescen
-    function loadPoliceScene(){
-        alert ("vakterna har tillkallat polis, du spenderar resten av natten i fyllecell");
+  textNode.options.forEach(option => {
+    if (showOption(option)) {
+      const button = document.createElement('button')
+      button.innerText = option.text
+      button.classList.add('btn')
+      button.addEventListener('click', () => selectOption(option))
+      optionButtonsElement.appendChild(button)
     }
+  })
 }
 
-//closer scene 1
-
-function loadCloserScene1() {
-    
-    alert ("Efter att fortsatt dricka ett par stor stark fick du till sist gå hem utan något napp ikväll, du bestämde dig för att testa igen imorgon men vara lite trevligare");
-
-
-}
-// closer scene 2
-function loadCloserScene2() {
-    
-    alert ("Du vingla sakta hem utan något napp ikväll, du bestämde dig för att testa igen imorgon men vara lite trevligare");
-
-
-}
-//not cleaned scene
-function loadNotCleanedScene() {
-    
-    alert ("Du hade inte städat hemma så hon tyckte det såg för ofräscht ut och valde att dricka upp sin öl du bjöd på och åka hem igen");
-    
-
+function showOption(option) {
+  return option.requiredState == null || option.requiredState(state)
 }
 
-function loadPoliceScene() {
-    
-    alert ("Polisen grep dig och tog med dig till fyllecellen där du fick sova resten av natten");
-
-
+/**
+ * 
+ * @param {Option} option 
+ * @returns 
+ */
+function selectOption(option) {
+  const nextTextNodeId = option.nextText
+  if (nextTextNodeId <= 0) {
+    return startGame()
+  }
+  state = Object.assign(state, option.setState)
+  showTextNode(nextTextNodeId)
 }
 
+/**
+ * @typedef {{ text: string, nextText: number }} Option
+ */
 
+/**
+ * @type {Array<Option>}
+ */
+const textNodes = [
+  {
+    id: 1,
+    text: 'Du vaknar upp på en konstig plats, bredvid dig ser du en behållare med en röd flytande vätska i',
+    options: [
+      {
+        text: 'Ta upp behållaren',
+        setState: { blueGoo: true },
+        nextText: 2
+      },
+      {
+        text: 'Gå vidare utan att ta med vätskan',
+        nextText: 2
+      }
+    ]
+  },
+  {
+    id: 2,
+    text: 'På din jakt på svar så träffar du på en tjej i ett marknadsstånd.',
+    options: [
+      {
+        text: 'Byt vätskan mot ett svärd',
+        requiredState: (currentState) => currentState.blueGoo,
+        setState: { blueGoo: false, sword: true },
+        nextText: 3
+      },
+      {
+        text: 'Byt vätskan mot en sköld',
+        requiredState: (currentState) => currentState.blueGoo,
+        setState: { blueGoo: false, shield: true },
+        nextText: 3
+      },
+      {
+        text: 'Ignorera försäljaren, hon känns skum',
+        nextText: 3
+      }
+    ]
+  },
+  {
+    id: 3,
+    text: 'Efter att ha lämnat försäljaren börjar du känna dig trött och snubblar du över en liten by som ligger bredvid ett slott som ser mystiskt och skrämmande ut',
+    options: [
+      {
+        text: 'Du blir nyfiken och vill utforska slottet',
+        nextText: 4
+      },
+      {
+        text: 'Hitta ett rum att sova ut på i byn',
+        nextText: 5
+      },
+      {
+        text: 'Hitta ett stall och sov ut i en hästbox bland hö',
+        nextText: 6
+      }
+    ]
+  },
+  {
+    id: 4,
+    text: 'Medans du utforskar slottet blir du så trött så du somnar, medans du sover blir du mördad av dom hemska monstren som finns i slottet',
+    options: [
+      {
+        text: 'Starta Om',
+        nextText: -1
+      }
+    ]
+  },
+  {
+    id: 5,
+    text: 'Utan pengar att betala för ett rum bryter du dig in i ett rum, ägaren till boendet hittar dig och lämnar över dig till vakterna som griper dig och låser in dig i en cell.',
+    options: [
+      {
+        text: 'Starta Om',
+        nextText: -1
+      }
+    ]
+  },
+  {
+    id: 6,
+    text: 'Du vaknar upp full med energi och nu redo att utforska det mystiska slottet som låg i närheten.',
+    options: [
+      {
+        text: 'Utforska slottet',
+        nextText: 7
+      }
+    ]
+  },
+  {
+    id: 7,
+    text: 'Medans du utforksar det stora slottet, träffar du på ett stort monster.',
+    options: [
+      {
+        text: 'Spring!',
+        nextText: 8
+      },
+      {
+        text: 'Attackera monstret med ditt svärd',
+        requiredState: (currentState) => currentState.sword,
+        nextText: 9
+      },
+      {
+        text: 'Göm dig bakom din sköld.',
+        requiredState: (currentState) => currentState.shield,
+        nextText: 10
+      },
+      {
+        text: 'Släng den mystiska röda vätskan på monstret.',
+        requiredState: (currentState) => currentState.blueGoo,
+        nextText: 11
+      }
+    ]
+  },
+  {
+
+    /**
+     * @typedef {{ text: string, nextText: number }} Option takes you back to start
+     */
+    id: 8,
+    text: 'Du springer och springer men monstret var för snabbt och kom ikapp och slet dig i stycken.',
+    options: [
+      {
+        text: 'Starta Om',
+        nextText: -1
+      }
+    ]
+  },
+  {
+    id: 9,
+    text: 'Du försöker förgäves att svinga ditt svärd mot monstret som har en ogentränglig hud, monstret mördar dig.',
+    options: [
+      {
+        text: 'Starta Om',
+        nextText: -1
+      }
+    ]
+  },
+  {
+    id: 10,
+    text: 'Monstret skrattar åt dig att du trodde skölden skulle kunna hjälpa dig, monstret slaktar dig med sina klor',
+    options: [
+      {
+        text: 'Starta Om',
+        nextText: -1
+      }
+    ]
+  },
+  {
+
+    /**
+     * @typedef {{ text: string, nextText: number }} Option takes you back to start and if blue goo choosen you won the game
+     */
+    id: 11,
+    text: 'Du kastar vätskan på monstret som börjar vråla av smärta, vätskan löser upp monstret för att sedan explodera. Medans blodet från monstret skvätter på dig bestämmer du dig för att ta över slottet och leva där för resten av dina dagar.',
+    options: [
+      {
+        text: 'Grattis Kung David, du är nu den nya mästaren i slottet.',
+        nextText: -1
+      }
+    ]
+  }
+]
+
+startGame()
